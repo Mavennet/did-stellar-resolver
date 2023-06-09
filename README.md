@@ -12,6 +12,16 @@ This library is currently in development and is not yet ready for production use
 
 The library relies on the [did-resolver](https://github.com/decentralized-identity/did-resolver) library.
 
+Since soroban is currently not on mainnet, the resolver will only work on futurenet.
+
+TODO:
+
+1. Translate the stellar address into a verification method
+2. Switch based on networks
+3. Add did document resolution metadata
+4. include delegation information
+5. add tests
+
 ## DID Method
 
 To encode a DID for a Stellar account, the following format is used:
