@@ -1,31 +1,39 @@
-import type { DIDDocument, DIDResolutionOptions, DIDResolutionResult, ParsedDID, Resolver } from 'did-resolver'
+import type {
+  DIDDocument,
+  DIDResolutionOptions,
+  DIDResolutionResult,
+  DIDResolver,
+  ParsedDID,
+  Resolvable
+} from 'did-resolver'
 import { StellarContract } from './StellarContract'
 import { StrKey } from 'soroban-client'
 
-const getResolver = (): StllrDIDResolver => {
-  return new StllrDIDResolver()
+const getResolver = (): Record<string, DIDResolver> => {
+  return new StllrDIDResolver().build()
 }
 
 class StllrDIDResolver {
   async resolve(
     did: string,
-    parsed?: ParsedDID,
-    didResolver?: Resolver,
-    options?: DIDResolutionOptions
+    parsed: ParsedDID,
+    _unused: Resolvable,
+    options: DIDResolutionOptions
   ): Promise<DIDResolutionResult> {
-    if (did.split(':')[1] !== 'stllr') {
+    if (parsed.method !== 'stllr') {
       throw new Error('Unsupported DID method')
     }
-
-    if (did.split(':')[2] === undefined) {
-      throw new Error('Invalid DID')
+    let account
+    let network
+    if (did.split(':').length === 3) {
+      network = 2
+      account = did.split(':')[2]
+    } else {
+      network = parseInt(did.split(':')[2])
+      account = did.split(':')[3]
     }
 
-    const account = did.split(':')[2]
-
-    const contract = new StellarContract('standalone')
-
-    await contract.getAccount()
+    const contract = new StellarContract(network)
 
     const { owner } = await contract.identity(account)
 
@@ -44,16 +52,22 @@ class StllrDIDResolver {
           publicKeyJwk: {
             kty: 'OKP',
             crv: 'Ed25519',
-            x: '9GXjPGGvmRq9F6Ng5dQQ_s31mfhxrcNZxRGONrmH30k' // example while trying to get owner's JWK
+            x: `${owner.toString()}` // this is not correct, it should be the x value
           }
         }
       ]
     }
 
     return {
+      didDocumentMetadata: {},
       didResolutionMetadata: { contentType: 'application/did+ld+json' },
-      didDocument,
-      didDocumentMetadata: {}
+      didDocument
+    }
+  }
+
+  build(): Record<string, DIDResolver> {
+    return {
+      stllr: this.resolve.bind(this)
     }
   }
 }

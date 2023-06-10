@@ -1,5 +1,5 @@
-import { type Account, Address, Contract, Server, type xdr } from 'soroban-client'
-import { ACCOUNT_ID, CONTRACT_ID, networks } from './config'
+import { Account, Address, Contract, Server, type xdr } from 'soroban-client'
+import { defaultAddress, getNetwork } from './config'
 import { getContractValue } from './interactWithNetwork'
 import { scValToIdentity } from './convert'
 import type { Identity } from './types'
@@ -7,18 +7,15 @@ import type { Identity } from './types'
 export class StellarContract {
   private readonly server: Server
   private readonly contract: Contract
-  private account: Account
-  constructor(network: string) {
-    // initialize soroban client
-    this.server = new Server(networks[network].url, {
+  private readonly account: Account
+  constructor(networkId: number) {
+    const network = getNetwork(networkId)
+    this.server = new Server(network.url, {
       timeout: 30,
-      allowHttp: network === 'standalone'
+      allowHttp: networkId === 3
     })
-    this.contract = new Contract(CONTRACT_ID)
-  }
-
-  async getAccount(): Promise<void> {
-    this.account = await this.server.getAccount(ACCOUNT_ID)
+    this.contract = new Contract(network.contractId)
+    this.account = new Account(defaultAddress, '0')
   }
 
   public async identity(did: string): Promise<Identity> {

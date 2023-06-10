@@ -17,14 +17,13 @@ Since soroban is currently not on mainnet, the resolver will only work on future
 TODO:
 
 1. Translate the stellar address into a verification method
-2. Switch based on networks
-3. Add did document resolution metadata
-4. include delegation information
-5. add tests
+1. Add did document resolution metadata
+1. include delegation information
+1. add tests
 
 ## DID Method
 
-To encode a DID for a Stellar account, the following format is used:
+To encode a DID for a Stellar account, the following format is used, since the app is currently only on the futurenet network, if the network identifier is not included it defaults to futurenet.
 
 ```bash
 did:stllr:<stellar_address>
@@ -46,8 +45,46 @@ uses the futurenet network.
 
 ## Structure of the DID Document
 
-Stellar currently only supports Ed25519 keypairs, so the DID Document will use JsonWebKey2020 that will always be an Ed25519 keypair.
+Stellar currently only uses Ed25519 Keys, so the verification method is always of type `JsonWebKey2020` and the `publicKeyJwk` field is always present, with a type of `OKP` and a curve of `Ed25519`.
+
+```javascript
+    {
+      '@context': ['https://www.w3.org/ns/did/v1', 'https://w3id.org/security/suites/jws-2020/v1'],
+      id: did,
+      verificationMethod: [
+        {
+          id: `${did}`,
+          type: 'JsonWebKey2020',
+          controller: `did:stllr:${owner.toString()}`,
+          publicKeyJwk: {
+            kty: 'OKP',
+            crv: 'Ed25519',
+            x: '9GXjPGGvmRq9F6Ng5dQQ_s31mfhxrcNZxRGONrmH30k' // example while trying to get owner's JWK
+          }
+        }
+      ]
+    }
+```
 
 ## Resolving the DID Document
 
-Section TBD
+To use this library you can pass it to the did-resolver library:
+
+```javascript
+
+import { Resolver } from "did-resolver";
+import { getResolver } from "stllr-did-resolver";
+
+const config = {
+  network: "standalone",
+};
+
+const stllrDidResolver = getResolver(config);
+
+const didResolver = new Resolver(stllrDidResolver);
+
+didResolver
+  .resolve("did:stllr:GAICHJM4OUNAVKALCO2ANSXVSOD7Z2UTXE55R5RY3RX352LSJC6SYZXV")
+  .then((doc) => console.log(doc));
+
+```

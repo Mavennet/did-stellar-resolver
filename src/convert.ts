@@ -14,8 +14,8 @@ export function scValToIdentity(value: xdr.ScVal): Identity {
   // TBD - parse the delegates and attributes into the maps
 
   return {
-    owner: owner,
-    delegates: delegates,
-    attributes: attributes
+    owner,
+    delegates,
+    attributes
   }
 }

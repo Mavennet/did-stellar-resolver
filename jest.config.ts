@@ -11,6 +11,10 @@ const jestConfig: Config.InitialOptions = {
   coverageDirectory: '../coverage',
   testEnvironment: 'node',
   preset: 'ts-jest/presets/js-with-ts',
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+    '#node-web-compat': './node-web-compat-node.js'
+  },
 
   coverageReporters: ['html', 'json-summary']
 }
