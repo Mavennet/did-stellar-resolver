@@ -25,7 +25,7 @@ describe('resolve', () => {
           publicKeyJwk: {
             kty: 'OKP',
             crv: 'Ed25519',
-            x: 'GDIY6AQQ75WMD4W46EYB7O6UYMHOCGQHLAQGQTKHDX4J2DYQCHVCR4W4'
+            x: '0Y8CEP9swfLc8TAfu9TDDuEaB1ggaE1HHfidDxAR6ig'
           }
         }
       ]
@@ -51,7 +51,7 @@ describe('resolve', () => {
           publicKeyJwk: {
             kty: 'OKP',
             crv: 'Ed25519',
-            x: 'GDIY6AQQ75WMD4W46EYB7O6UYMHOCGQHLAQGQTKHDX4J2DYQCHVCR4W4'
+            x: '0Y8CEP9swfLc8TAfu9TDDuEaB1ggaE1HHfidDxAR6ig'
           }
         }
       ]

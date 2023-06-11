@@ -7,7 +7,7 @@ import type {
   Resolvable
 } from 'did-resolver'
 import { StellarContract } from './StellarContract'
-import { StrKey } from 'soroban-client'
+import { toPublicKey } from './helper'
 
 const getResolver = (): Record<string, DIDResolver> => {
   return new StllrDIDResolver().build()
@@ -37,9 +37,7 @@ class StllrDIDResolver {
 
     const { owner } = await contract.identity(account)
 
-    StrKey.decodeEd25519PublicKey(owner.toString())
-
-    // TODO:   translate owner address to its JWK form
+    const publicKeyJwk = toPublicKey(owner.toString()).export({ format: 'jwk' })
 
     const didDocument: DIDDocument = {
       '@context': ['https://www.w3.org/ns/did/v1', 'https://w3id.org/security/suites/jws-2020/v1'],
@@ -52,7 +50,7 @@ class StllrDIDResolver {
           publicKeyJwk: {
             kty: 'OKP',
             crv: 'Ed25519',
-            x: `${owner.toString()}` // this is not correct, it should be the x value
+            x: publicKeyJwk.x
           }
         }
       ]
