@@ -1,7 +1,3 @@
-// import { Keypair } from 'soroban-client'
-
-// export const keyPair = Keypair.fromSecret('SAJWWMPTAOIIVFLAQLID3LUZBXPRSQR4PFFFZUJWE7MZPEMD57UY4LL5')
-// export const defaultAddress = 'GAICHJM4OUNAVKALCO2ANSXVSOD7Z2UTXE55R5RY3RX352LSJC6SYZXV'
 export const defaultAddress = 'GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF'
 
 const networks = [

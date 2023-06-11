@@ -16,10 +16,11 @@ Since soroban is currently not on mainnet, the resolver will only work on future
 
 TODO:
 
-1. Translate the stellar address into a verification method
+1. Translate the stellar address into a verification method, currently we are returning the stellar pub key as the verification method, but this is not correct.
 1. Add did document resolution metadata
 1. include delegation information
 1. add tests
+1. This assumes you are using the default soroban url, we should allow for a custom url to be passed in.
 
 ## DID Method
 
