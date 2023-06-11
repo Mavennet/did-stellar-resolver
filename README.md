@@ -18,7 +18,7 @@ TODO:
 
 1. Add did document resolution metadata
 1. include delegation information
-1. add tests
+1. increase test coverage
 1. This assumes you are using the default soroban url, we should allow for a custom url to be passed in.
 
 ## DID Method
@@ -75,16 +75,28 @@ To use this library you can pass it to the did-resolver library:
 import { Resolver } from "did-resolver";
 import { getResolver } from "stllr-did-resolver";
 
-const config = {
-  network: "standalone",
-};
-
-const stllrDidResolver = getResolver(config);
+const stllrDidResolver = getResolver();
 
 const didResolver = new Resolver(stllrDidResolver);
 
 didResolver
   .resolve("did:stllr:GAICHJM4OUNAVKALCO2ANSXVSOD7Z2UTXE55R5RY3RX352LSJC6SYZXV")
+  .then((doc) => console.log(doc));
+
+```
+To use a different network, you can pass in the network identifier as the second parameter:
+
+```javascript
+
+import { Resolver } from "did-resolver";
+import { getResolver } from "stllr-did-resolver";
+
+const stllrDidResolver = getResolver();
+
+const didResolver = new Resolver(stllrDidResolver);
+
+didResolver
+  .resolve("did:stllr:2:GAICHJM4OUNAVKALCO2ANSXVSOD7Z2UTXE55R5RY3RX352LSJC6SYZXV")
   .then((doc) => console.log(doc));
 
 ```
