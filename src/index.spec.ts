@@ -7,7 +7,7 @@ describe('exports', () => {
   })
 })
 
-describe('config', () => {
+describe('resolve', () => {
   it('should resolve a document with no network', async () => {
     const stellarResolver = getResolver()
     const resolver = new Resolver(stellarResolver)
