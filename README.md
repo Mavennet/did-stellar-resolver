@@ -60,7 +60,7 @@ Stellar currently only uses Ed25519 Keys, so the verification method is always o
           publicKeyJwk: {
             kty: 'OKP',
             crv: 'Ed25519',
-            x: '9GXjPGGvmRq9F6Ng5dQQ_s31mfhxrcNZxRGONrmH30k' // example while trying to get owner's JWK
+            x: '9GXjPGGvmRq9F6Ng5dQQ_s31mfhxrcNZxRGONrmH30k'
           }
         }
       ]
