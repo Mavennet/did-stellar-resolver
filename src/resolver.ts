@@ -44,7 +44,7 @@ class StllrDIDResolver {
       id: did,
       verificationMethod: [
         {
-          id: did,
+          id: `${did}#controller`,
           type: 'JsonWebKey2020',
           controller: `did:stllr:${owner.toString()}`,
           publicKeyJwk: {
@@ -53,7 +53,9 @@ class StllrDIDResolver {
             x: publicKeyJwk.x
           }
         }
-      ]
+      ],
+      assertionMethod: [`${did}#controller`],
+      authentication: [`${did}#controller`]
     }
 
     return {
