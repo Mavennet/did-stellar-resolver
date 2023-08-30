@@ -39,6 +39,6 @@
   },
   "dependencies": {
     "did-resolver": "^4.1.0",
-    "soroban-client": "^0.8.0"
+    "soroban-client": "^0.11.1"
   }
 }
