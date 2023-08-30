@@ -9,11 +9,11 @@ export const getContractValue = async (client: Server, account, operation): Prom
     .setTimeout(TimeoutInfinite)
     .build()
 
-  const { results } = await client.simulateTransaction(transaction)
+  const { result, error } = await client.simulateTransaction(transaction)
 
-  if (results.length !== 1) {
-    throw new Error('unexpected results length')
+  if (error || !result) {
+    console.error({ error })
+    throw new Error(`Could not get results from chain ${error}`)
   }
-
-  return xdr.ScVal.fromXDR(results[0].xdr, 'base64')
+  return result.retval
 }
