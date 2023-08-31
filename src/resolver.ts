@@ -7,7 +7,8 @@ import type {
   Resolvable
 } from 'did-resolver'
 import { StellarContract } from './StellarContract'
-import { toPublicKey } from './helper'
+import { splitIdentifier, toPublicKey } from './helper'
+import { getNetwork } from './config'
 
 const getResolver = (): Record<string, DIDResolver> => {
   return new StllrDIDResolver().build()
@@ -23,19 +24,14 @@ class StllrDIDResolver {
     if (parsed.method !== 'stllr') {
       throw new Error('Unsupported DID method')
     }
-    let account
-    let network
-    if (did.split(':').length === 3) {
-      network = 2
-      account = did.split(':')[2]
-    } else {
-      network = parseInt(did.split(':')[2])
-      account = did.split(':')[3]
-    }
+
+    const { address, networkId } = splitIdentifier(did)
+
+    const network = getNetwork(networkId)
 
     const contract = new StellarContract(network)
 
-    const { owner } = await contract.identity(account)
+    const { owner } = await contract.identity(address)
 
     const publicKeyJwk = toPublicKey(owner.toString()).export({ format: 'jwk' })
 

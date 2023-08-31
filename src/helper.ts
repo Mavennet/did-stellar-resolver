@@ -43,3 +43,30 @@ export function toPublicKey(key: string): crypto.KeyObject {
     key: der
   })
 }
+
+export function splitIdentifier(did: string) {
+  const didComponents = did.split(':')
+  let protocol: string, didMethod: string, networkId: number, address: string
+
+  protocol = didComponents[0]
+  didMethod = didComponents[1]
+
+  if (didComponents.length >= 4) {
+    networkId = parseInt(didComponents[2])
+    address = didComponents[3]
+  } else {
+    // default to futurenet
+    networkId = 2
+    address = didComponents[2]
+  }
+
+  if (protocol !== 'did') {
+    throw new Error('Not a DID')
+  }
+
+  if (didMethod !== 'stllr') {
+    throw new Error('Unsupported DID method')
+  }
+
+  return { networkId, address }
+}

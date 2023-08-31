@@ -1,6 +1,13 @@
 export const defaultAddress = 'GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF'
 
-const networks = [
+export interface INetwork {
+  id: number
+  url: string
+  passPhrase: string
+  contractId: string
+}
+
+const defaultNetworks: INetwork[] = [
   {
     id: 0,
     url: 'https://horizon.stellar.org',
@@ -27,9 +34,9 @@ const networks = [
   }
 ]
 
-export const getNetwork = (networkId: number): any => {
+export const getNetwork = (networkId: number): INetwork => {
   if (networkId !== 2 && networkId !== 3) {
     throw new Error('network not supported')
   }
-  return networks[networkId]
+  return defaultNetworks[networkId]
 }

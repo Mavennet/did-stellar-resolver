@@ -1,5 +1,5 @@
 import { Account, Address, Contract, Server, type xdr } from 'soroban-client'
-import { defaultAddress, getNetwork } from './config'
+import { INetwork, defaultAddress, getNetwork } from './config'
 import { getContractValue } from './interactWithNetwork'
 import { scValToIdentity } from './convert'
 import type { Identity } from './types'
@@ -8,11 +8,10 @@ export class StellarContract {
   private readonly server: Server
   private readonly contract: Contract
   private readonly account: Account
-  constructor(networkId: number) {
-    const network = getNetwork(networkId)
+  constructor(network: INetwork) {
     this.server = new Server(network.url, {
       timeout: 30,
-      allowHttp: networkId === 3
+      allowHttp: network.id === 3
     })
     this.contract = new Contract(network.contractId)
     this.account = new Account(defaultAddress, '0')
@@ -23,8 +22,13 @@ export class StellarContract {
 
     const operation = this.contract.call('identity', ...params)
 
+    console.log(params)
     const value = await getContractValue(this.server, this.account, operation)
 
+    console.log(value)
     return scValToIdentity(value)
   }
+
+  changeOwner = () => {}
+  setAttribute = () => {}
 }
