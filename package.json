@@ -1,6 +1,6 @@
 {
-  "name": "stllr-did-resolver",
-  "version": "0.1.0",
+  "name": "@mavennet/stllr-did-resolver",
+  "version": "0.1.1",
   "description": "Resolve DID documents for stellar addresses",
   "main": "./lib/index.js",
   "source": "./src/index.ts",
@@ -9,8 +9,7 @@
     "test:ci": "jest --coverage --ci",
     "build": "tsc -p tsconfig.build.json",
     "build:watch": "tsc -p tsconfig.build.json --watch",
-    "lint": "eslint . --ext .ts",
-    "dev": "nodemon src/index.ts"
+    "lint": "eslint . --ext .ts"
   },
   "repository": {
     "type": "git",
@@ -39,6 +38,11 @@
   },
   "dependencies": {
     "did-resolver": "^4.1.0",
-    "soroban-client": "^0.11.1"
+    "soroban-client": "^1.0.0-beta.2"
+  },
+  "types": "./lib/index.d.ts",
+  "directories": {
+    "doc": "docs",
+    "lib": "lib"
   }
 }

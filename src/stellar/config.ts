@@ -1,6 +1,13 @@
 export const defaultAddress = 'GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF'
 
-const networks = [
+export interface INetwork {
+  id: number
+  url: string
+  passPhrase: string
+  contractId: string
+}
+
+const defaultNetworks: INetwork[] = [
   {
     id: 0,
     url: 'https://horizon.stellar.org',
@@ -17,7 +24,7 @@ const networks = [
     id: 2,
     url: 'https://rpc-futurenet.stellar.org',
     passPhrase: 'Test SDF Future Network ; October 2022',
-    contractId: 'CA2F3IPU2INVPNFUWLYLKKLXX65LX6FHU4J3U2NKENR2NW4RSIBUM4C2'
+    contractId: 'CDF7ETQM2PJKTJRMR4EZGMDYTRAU34WAPXQCM44ZMRELP6XYLB4NQTDP'
   },
   {
     id: 3,
@@ -27,9 +34,9 @@ const networks = [
   }
 ]
 
-export const getNetwork = (networkId: number): any => {
+export const getNetwork = (networkId: number): INetwork => {
   if (networkId !== 2 && networkId !== 3) {
     throw new Error('network not supported')
   }
-  return networks[networkId]
+  return defaultNetworks[networkId]
 }
