@@ -1,34 +1,70 @@
-import { Account, Address, Contract, Server, type xdr } from 'soroban-client'
+import { Account, Address, Contract, Server, SorobanRpc, type xdr } from 'soroban-client'
 import { INetwork, defaultAddress, getNetwork } from './config'
-import { getContractValue } from './interactWithNetwork'
+import { getContractValue, sendTransaction } from './interactWithNetwork'
 import { scValToIdentity } from './convert'
 import type { Identity } from './types'
 
 export class StellarContract {
-  private readonly server: Server
-  private readonly contract: Contract
-  private readonly account: Account
-  constructor(network: INetwork) {
-    this.server = new Server(network.url, {
+  private server: Server
+  private contract: Contract
+  private account: Account
+
+  public static create = async (network: INetwork, account?: string) => {
+    const stellarContract = new StellarContract()
+    stellarContract.server = new Server(network.url, {
       timeout: 30,
       allowHttp: network.id === 3
     })
-    this.contract = new Contract(network.contractId)
-    this.account = new Account(defaultAddress, '0')
+    stellarContract.contract = new Contract(network.contractId)
+
+    if (account) {
+      stellarContract.account = await stellarContract.server.getAccount(account)
+    } else {
+      stellarContract.account = new Account(defaultAddress, '0')
+    }
+
+    return stellarContract
   }
 
-  public async identity(did: string): Promise<Identity> {
+  /**
+   *
+   * @param {string} did - the did to resolve
+   * @returns {Identity} the identity of the did on the network
+   */
+
+  public identity = async (did: string): Promise<Identity> => {
     const params: xdr.ScVal[] = [Address.fromString(did).toScVal()]
 
     const operation = this.contract.call('identity', ...params)
 
-    console.log(params)
+    console.log({ params })
     const value = await getContractValue(this.server, this.account, operation)
 
-    console.log(value)
+    console.log({ value })
     return scValToIdentity(value)
   }
 
-  changeOwner = () => {}
-  setAttribute = () => {}
+  /**
+   *
+   * @param {string} did - the did to transfer ownership of
+   * @param {string} currentOwner - the current owner of the did
+   * @param {string} newOwner - the new owner of the did
+   * @returns {SorobanRpc.SendTransactionResponse} the response from the network
+   */
+
+  public changeOwner = async (
+    did: string,
+    currentOwner: string,
+    newOwner: string
+  ): Promise<SorobanRpc.SendTransactionResponse> => {
+    const operation = this.contract.call(
+      'transfer',
+      Address.fromString(did).toScVal(),
+      Address.fromString(currentOwner).toScVal(),
+      Address.fromString(newOwner).toScVal()
+    )
+
+    const response = await sendTransaction(this.server, this.account, operation)
+    return response
+  }
 }

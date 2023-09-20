@@ -29,7 +29,7 @@ class StllrDIDResolver {
 
     const network = getNetwork(networkId)
 
-    const contract = new StellarContract(network)
+    const contract = await StellarContract.create(network)
 
     const { owner } = await contract.identity(address)
 

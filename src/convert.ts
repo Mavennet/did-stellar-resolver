@@ -11,7 +11,7 @@ export function scValToIdentity(value: xdr.ScVal): Identity {
   const delegates = new Map<Address, Delegation>()
   const attributes = new Map<string, Attribute>()
 
-  // TBD - parse the delegates and attributes into the maps
+  // TODO:  - parse the delegates and attributes into the maps
 
   return {
     owner,
