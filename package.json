@@ -1,6 +1,6 @@
 {
-  "name": "stllr-did-resolver",
-  "version": "0.1.0",
+  "name": "@mavennet/stllr-did-resolver",
+  "version": "0.1.1",
   "description": "Resolve DID documents for stellar addresses",
   "main": "./lib/index.js",
   "source": "./src/index.ts",
@@ -39,5 +39,10 @@
   "dependencies": {
     "did-resolver": "^4.1.0",
     "soroban-client": "^1.0.0-beta.2"
+  },
+  "types": "./lib/index.d.ts",
+  "directories": {
+    "doc": "docs",
+    "lib": "lib"
   }
 }

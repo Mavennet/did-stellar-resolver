@@ -6,9 +6,9 @@ import type {
   ParsedDID,
   Resolvable
 } from 'did-resolver'
-import { StellarContract } from './StellarContract'
+import { StellarContract } from './stellar/StellarContract'
 import { splitIdentifier, toPublicKey } from './helper'
-import { getNetwork } from './config'
+import { getNetwork } from './stellar/config'
 
 const getResolver = (): Record<string, DIDResolver> => {
   return new StllrDIDResolver().build()
