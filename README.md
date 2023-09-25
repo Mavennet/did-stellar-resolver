@@ -14,12 +14,6 @@ The library relies on the [did-resolver](https://github.com/decentralized-identi
 
 Since soroban is currently not on mainnet, the resolver will only work on futurenet.
 
-TODO:
-
-1. Add did document resolution metadata
-1. include delegation information
-1. increase test coverage
-1. This assumes you are using the default soroban url, we should allow for a custom url to be passed in.
 
 ## DID Method
 
