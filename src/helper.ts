@@ -1,4 +1,4 @@
-import { StrKey } from 'soroban-client'
+import { StrKey } from 'stellar-sdk'
 import crypto from 'crypto'
 
 // from  https://keygen.sh/blog/how-to-use-hexadecimal-ed25519-keys-in-node/

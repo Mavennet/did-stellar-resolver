@@ -1,4 +1,4 @@
-import { SorobanRpc } from 'soroban-client';
+import { SorobanRpc } from 'stellar-sdk';
 import { INetwork } from './config';
 import type { Identity } from './types';
 export declare class StellarContract {
@@ -7,5 +7,5 @@ export declare class StellarContract {
     private account;
     static create: (network: INetwork, account?: string) => Promise<StellarContract>;
     identity: (did: string) => Promise<Identity>;
-    changeOwner: (did: string, currentOwner: string, newOwner: string) => Promise<SorobanRpc.SendTransactionResponse>;
+    changeOwner: (did: string, currentOwner: string, newOwner: string) => Promise<SorobanRpc.Api.SendTransactionResponse>;
 }

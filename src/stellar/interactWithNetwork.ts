@@ -1,55 +1,46 @@
-import {
-  type Server,
-  TimeoutInfinite,
-  TransactionBuilder,
-  xdr,
-  Keypair,
-  Account,
-  SorobanRpc,
-  BASE_FEE
-} from 'soroban-client'
+import { SorobanRpc, TimeoutInfinite, TransactionBuilder, xdr, Keypair, Account, BASE_FEE } from 'stellar-sdk'
 
-export const getContractValue = async (client: Server, account: Account, operation): Promise<xdr.ScVal> => {
+export const getContractValue = async (server: SorobanRpc.Server, account: Account, operation): Promise<xdr.ScVal> => {
   const transaction = new TransactionBuilder(account, {
-    fee: '100', // this can be a static number as we are always simulating a transaction and never actually sending it.
-    networkPassphrase: (await client.getNetwork()).passphrase
+    fee: BASE_FEE,
+    networkPassphrase: (await server.getNetwork()).passphrase
   })
     .addOperation(operation)
     .setTimeout(TimeoutInfinite)
     .build()
 
-  const { result, error } = (await client.simulateTransaction(transaction)) as any
+  console.log({ transaction })
+
+  const { result, error } = (await server.simulateTransaction(transaction)) as any
+  console.log({ result, error })
 
   if (error || !result) {
-    console.error({ error })
     throw new Error(`Could not get results from chain ${error}`)
   }
   return result.retval
 }
 
 export const sendTransaction = async (
-  client: Server,
+  server: SorobanRpc.Server,
   account: Account,
   operation
-): Promise<SorobanRpc.SendTransactionResponse> => {
+): Promise<SorobanRpc.Api.SendTransactionResponse> => {
   console.log({ account })
   const transaction = new TransactionBuilder(account, {
-    fee: BASE_FEE, // this can be a static number as we are always simulating a transaction and never actually sending it.
-    networkPassphrase: (await client.getNetwork()).passphrase
+    fee: BASE_FEE,
+    networkPassphrase: (await server.getNetwork()).passphrase
   })
     .addOperation(operation)
     .setTimeout(TimeoutInfinite)
     .build()
 
-  const preparedTransaction = await client.prepareTransaction(transaction)
-  console.log({ preparedTransaction })
+  const preparedTransaction = await server.prepareTransaction(transaction)
 
-  // TODO: sign with the correct key
   preparedTransaction.sign(Keypair.fromSecret(''))
 
-  const response = await client.sendTransaction(preparedTransaction)
-  if (response.status === 'ERROR') {
-    throw new Error(response.errorResultXdr?.toString())
+  const response = await server.sendTransaction(preparedTransaction)
+  if (response.status === 'ERROR' && response.errorResult) {
+    throw new Error(response.errorResult.toString())
   }
   return response
 }

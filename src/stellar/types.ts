@@ -1,4 +1,4 @@
-import { type Address } from 'soroban-client'
+import { type Address } from 'stellar-sdk'
 
 export interface Identity {
   owner: Address

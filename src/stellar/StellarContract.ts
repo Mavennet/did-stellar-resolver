@@ -1,17 +1,17 @@
-import { Account, Address, Contract, Server, SorobanRpc, type xdr } from 'soroban-client'
+import { Account, Address, Contract, SorobanRpc, type xdr } from 'stellar-sdk'
 import { INetwork, defaultAddress, getNetwork } from './config'
 import { getContractValue, sendTransaction } from './interactWithNetwork'
 import { scValToIdentity } from './convert'
 import type { Identity } from './types'
 
 export class StellarContract {
-  private server: Server
+  private server: SorobanRpc.Server
   private contract: Contract
   private account: Account
 
   public static create = async (network: INetwork, account?: string) => {
     const stellarContract = new StellarContract()
-    stellarContract.server = new Server(network.url, {
+    stellarContract.server = new SorobanRpc.Server(network.url, {
       timeout: 30,
       allowHttp: network.id === 3
     })
@@ -37,10 +37,8 @@ export class StellarContract {
 
     const operation = this.contract.call('identity', ...params)
 
-    console.log({ params })
     const value = await getContractValue(this.server, this.account, operation)
 
-    console.log({ value })
     return scValToIdentity(value)
   }
 
@@ -56,7 +54,7 @@ export class StellarContract {
     did: string,
     currentOwner: string,
     newOwner: string
-  ): Promise<SorobanRpc.SendTransactionResponse> => {
+  ): Promise<SorobanRpc.Api.SendTransactionResponse> => {
     const operation = this.contract.call(
       'transfer',
       Address.fromString(did).toScVal(),
